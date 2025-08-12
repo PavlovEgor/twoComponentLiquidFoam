@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "rhoPimpleAdiabaticFoam.C": "cpp",
+        "MyrhoPimpleAdiabaticFoam.C": "cpp",
+        "preprocess": "c",
+        "array": "c",
+        "string_view": "c"
+    }
+}
