@@ -52,7 +52,7 @@
 
     fvScalarMatrix rhoUEqn
     (
-        fvm::laplacian(rho) == rho2/D * fvc::div(U)
+        fvm::laplacian(rho) + (rho2/D) * fvc::div(U) 
     );
 
     rhoUEqn.solve();

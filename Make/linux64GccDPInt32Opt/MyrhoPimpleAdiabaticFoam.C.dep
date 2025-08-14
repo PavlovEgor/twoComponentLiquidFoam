@@ -931,8 +931,9 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/compressibleCourantNo.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/setDeltaT.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/rhoEqn.H \
 UEqn.H \
+rhoUEqn.H \
+contError.H \
 pEqn.H \
 resetBoundaries.H \
-rhoUEqn.H \
 
 #END

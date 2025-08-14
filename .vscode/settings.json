@@ -4,6 +4,7 @@
         "MyrhoPimpleAdiabaticFoam.C": "cpp",
         "preprocess": "c",
         "array": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "cstdlib": "cpp"
     }
 }

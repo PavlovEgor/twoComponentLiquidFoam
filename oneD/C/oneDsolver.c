@@ -2,13 +2,13 @@
 #include "stdlib.h"
 #include "math.h"
 
-#define Nt      10000
-#define Nx      1000
-#define Ncorr   5
-#define u0      10.0
-#define dt      1e-4
-#define dx      5e-2
-#define alpha   8e-4
+#define Nt      1000
+#define Nx      50000
+#define Ncorr   1
+#define u0      0.0
+#define dt      1e-1
+#define dx      1e-3
+#define alpha   10.0
 #define rho_1   1.5
 #define rho_2   1.0
 
@@ -16,13 +16,13 @@
 void init(double Rho[Nx]){
 
     for(int i; i < Nx; i++){
-        if (i < Nx/4 || i > 3 * Nx/4){
+        if (i < Nx/8 || i > 3 * Nx/8){
             Rho[i] = rho_2;
-        } else if (i < Nx/2)
+        } else if (i < Nx/4)
         {
-            Rho[i] = rho_1 + (rho_2 - rho_1) * (Nx/2 - i) * 4 / Nx;
+            Rho[i] = rho_1 + (rho_2 - rho_1) * (Nx/4 - i) * 8 / Nx;
         } else{
-            Rho[i] = rho_1 - (rho_2 - rho_1) * (Nx/2 - i) * 4 / Nx;
+            Rho[i] = rho_1 - (rho_2 - rho_1) * (Nx/4 - i) * 8 / Nx;
         }
     }
 }
@@ -75,9 +75,9 @@ void step_implicite(double Rho_cur[Nx], double Rho_prev[Nx], int i){
     for(int count = 0; count < Ncorr; count++){
         for (j = 1; j < Nx-1; j++)
         {
-            A[j] = -(dt * u0 / (dx * 2)) + Rho_cur[j-1] * (dt * alpha / ((dx * dx) * 4));
-            B[j] = 1 - Rho_cur[j] * (dt * alpha / ((dx * dx) * 2));
-            C[j] = (dt * u0 / (dx * 2)) + Rho_cur[j+1] * (dt * alpha / ((dx * dx) * 4));
+            A[j] = -(dt * u0 / (dx * 2)) - Rho_cur[j-1] * (dt * alpha / ((dx * dx) * 4));
+            B[j] = 1 + Rho_cur[j] * (dt * alpha / ((dx * dx) * 2));
+            C[j] = (dt * u0 / (dx * 2)) - Rho_cur[j+1] * (dt * alpha / ((dx * dx) * 4));
             D[j] = Rho_prev[j];
         }
         solve_3_diag(Rho_cur, A, B, C, D);
@@ -103,7 +103,10 @@ int main(){
     for (int i = 0; i < Nt; i++)
     {
         step_implicite(Rho_cur, Rho_prev, i);
-        print_line(Rho_cur, file);
+
+        if (i % 10 == 0){
+            print_line(Rho_cur, file);
+        }
     }
 
     return 0;

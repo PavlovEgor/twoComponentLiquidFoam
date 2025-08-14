@@ -110,7 +110,19 @@ int main(int argc, char *argv[])
             phi.storePrevIter();
             phiByRho.storePrevIter();
 
+            
+            #include "rhoEqn.H"
             #include "UEqn.H"
+
+            
+            for (int l = 0; l < 2; l++)
+            {
+                // Info<< "Time = before pEqn.h" << nl << endl;
+                #include "rhoUEqn.H"
+                #include "UEqn.H"
+            }
+            
+            #include "contError.H"
 
             // --- Pressure corrector loop
             while (pimple.correct())
@@ -119,7 +131,7 @@ int main(int argc, char *argv[])
                 #include "pEqn.H"
             }
 
-            #include "rhoUEqn.H"
+            
             
 
             // if (pimple.turbCorr())

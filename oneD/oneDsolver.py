@@ -25,7 +25,7 @@ D[-1] = 0
 u0 = 10.0
 dt = 1e-5
 dx = 1e-3
-alpha = 5e-4
+alpha = 1
 rho_1 = 1.5
 rho_2 = 1.0
 
@@ -50,9 +50,9 @@ def step_implicite(i):
     tmp = rho[i-1]
     for _ in range(Ncorr):
 
-        A[1:-1] = -np.ones(Nx-2) * (dt * u0 / (dx * 2)) + tmp[:-2] * (dt * alpha / ((dx * dx) * 4))
-        B[1:-1] = np.ones(Nx-2) - tmp[1:-1] * (dt * alpha / ((dx * dx) * 2))
-        C[1:-1] = np.ones(Nx-2) * (dt * u0 / (dx * 2)) + tmp[2:] * (dt * alpha / ((dx * dx) * 4))
+        A[1:-1] = -np.ones(Nx-2) * (dt * u0 / (dx * 2)) - tmp[:-2] * (dt * alpha / ((dx * dx) * 4))
+        B[1:-1] = np.ones(Nx-2) + tmp[1:-1] * (dt * alpha / ((dx * dx) * 2))
+        C[1:-1] = np.ones(Nx-2) * (dt * u0 / (dx * 2)) - tmp[2:] * (dt * alpha / ((dx * dx) * 4))
         D[1:-1] = rho[i-1][1:-1]
         
         tmp = solve_3_diag(A, B, C, D)

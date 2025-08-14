@@ -43,14 +43,15 @@
         (
             "phiHbyA",
             (
-                (rhoHbyAf & mesh.Sf())
-              + rhorAUf*fvc::interpolate(rho)*fvc::ddtCorr(U, phiByRho)
-              + fvc::interpolate(rho)
-              * fvc::alphaCorr(U, phiByRho, pimple.finalInnerIter())
+            //     (rhoHbyAf & mesh.Sf())
+            //   + rhorAUf*fvc::interpolate(rho)*fvc::ddtCorr(U, phiByRho)
+            //   + fvc::interpolate(rho)
+            //   * fvc::alphaCorr(U, phiByRho, pimple.finalInnerIter())
+            fvc::interpolate(rho)*fvc::flux(HbyA)
             )
         );
 
-        MRF.makeRelative(fvc::interpolate(rho), phiHbyA);
+        // MRF.makeRelative(fvc::interpolate(rho), phiHbyA);
 
         // Non-orthogonal pressure corrector loop
         while (pimple.correctNonOrthogonal())
@@ -59,7 +60,7 @@
             fvScalarMatrix pEqn
             (
                 fvc::div(phiHbyA) -
-                (c2) * fvm::ddt(p)
+                fvc::ddt(rho)
               - fvm::laplacian(rhorAUf, p) 
               
             );
