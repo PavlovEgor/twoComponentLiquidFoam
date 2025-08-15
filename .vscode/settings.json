@@ -5,6 +5,7 @@
         "preprocess": "c",
         "array": "c",
         "string_view": "c",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "constants.h": "c"
     }
 }
