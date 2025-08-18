@@ -1,0 +1,4 @@
+/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/application/twoDim/build/CMakeFiles/TwoComp2D.dir
+/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/application/twoDim/build/CMakeFiles/twoDim.dir
+/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/application/twoDim/build/CMakeFiles/edit_cache.dir
+/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/application/twoDim/build/CMakeFiles/rebuild_cache.dir

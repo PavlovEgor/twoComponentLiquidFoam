@@ -19,6 +19,7 @@ include_directories(../../include)
 add_executable(oneDim ${SOURCE_EXE})	# Создает исполняемый файл с именем main
 
 set(MYCOMPILE_FLAGS "-lm")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 add_definitions(${MYCOMPILE_FLAGS})
 

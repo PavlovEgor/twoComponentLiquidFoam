@@ -21,3 +21,31 @@ void solve_tridiag(int N, double* tmp, double* A, double* B, double* C, double* 
     free(P);
     free(Q);
 }
+
+
+void solve_square_pentadiag(double * X, struct penta_diag* pd){
+    double**  G = malloc(pd -> Nx * sizeof(double *));
+    double*** H = malloc(pd -> Nx * sizeof(double **));
+    double*   C = malloc(pd -> Ny * sizeof(double));
+    double*   R = malloc(pd -> Ny * sizeof(double));
+    double**  D = malloc(pd -> Nx * sizeof(double *));
+    
+    for (int i = 0; i < pd->Nx; i++)
+    {
+        G[i] = malloc(pd -> Ny * sizeof(double));
+        H[i] = malloc(pd -> Ny * sizeof(double *));
+
+        for (int j = 0; j < pd -> Ny; j++)
+        {
+            H[i][j] = malloc(pd -> Ny * sizeof(double));
+        }
+    }
+    for (int j = 0; j < pd -> Ny; j++)
+    {
+        D[j] = malloc((j + 1) * sizeof(double));
+    }
+    
+
+
+
+}

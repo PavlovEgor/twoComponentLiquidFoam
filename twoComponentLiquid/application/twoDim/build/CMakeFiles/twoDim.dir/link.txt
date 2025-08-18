@@ -1,0 +1,1 @@
+/usr/bin/cc -rdynamic CMakeFiles/twoDim.dir/twoDim.c.o -o twoDim  libTwoComp2D.a -lm 

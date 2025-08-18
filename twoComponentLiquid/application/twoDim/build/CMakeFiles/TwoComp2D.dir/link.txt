@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTwoComp2D.a CMakeFiles/TwoComp2D.dir/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/src/initialize.c.o CMakeFiles/TwoComp2D.dir/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/src/LS_solvers.c.o CMakeFiles/TwoComp2D.dir/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/src/step.c.o CMakeFiles/TwoComp2D.dir/home/gomerpavyk/MyrhoPimpleAdiabaticFoam/twoComponentLiquid/src/save.c.o
+/usr/bin/ranlib libTwoComp2D.a

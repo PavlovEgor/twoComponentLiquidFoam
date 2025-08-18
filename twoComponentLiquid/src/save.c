@@ -7,3 +7,11 @@ void save_1D_field(int N, double* Rho, FILE* output){
     } 
     fprintf(output, " \n");
 }
+
+void save_2D_field(int Nx, int Ny, double* field, FILE* output){
+    for (int j = 0; j < Nx * Ny; j++)
+    {
+        fprintf(output, "%0.6f ", field[j]);
+    } 
+    fprintf(output, " \n");
+}
