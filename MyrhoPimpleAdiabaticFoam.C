@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
 
     Info<< "\nStarting time loop\n" << endl;
 
-    dimensionedScalar rho2("rho2", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1.0);
-    dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 0.0000198);
-    dimensionedScalar c2("c2", dimensionSet(0, -2, 2, 0, 0, 0, 0), 1.0/2190400);
+    dimensionedScalar rho2("rho2", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1000.0);
+    // dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 2.3e-10);
+    dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 0.1);
 
     while (runTime.run())
     {
@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
 
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
-        if (pimple.nCorrPIMPLE() <= 1)
-        {
-            #include "rhoEqn.H"
-        }
+        // if (pimple.nCorrPIMPLE() <= 1)
+        // {
+        //     #include "rhoEqn_m.H"
+        // }
 
         // --- Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
@@ -109,20 +109,10 @@ int main(int argc, char *argv[])
             rho.storePrevIter();
             phi.storePrevIter();
             phiByRho.storePrevIter();
+            // p.storePrevIter();
 
-            
-            #include "rhoEqn.H"
             #include "UEqn.H"
-
-            
-            for (int l = 0; l < 2; l++)
-            {
-                // Info<< "Time = before pEqn.h" << nl << endl;
-                #include "rhoUEqn.H"
-                #include "UEqn.H"
-            }
-            
-            #include "contError.H"
+            #include "rhoEqn_m.H"
 
             // --- Pressure corrector loop
             while (pimple.correct())
@@ -131,16 +121,21 @@ int main(int argc, char *argv[])
                 #include "pEqn.H"
             }
 
-            
-            
 
             // if (pimple.turbCorr())
             // {
             //     turbulence->correct();
             // }
         }
+    // Info << "p[253] = " << p[253] << Foam::endl; 
 
         runTime.write();
+        // В любом месте кода:
+        if (runTime.outputTime())
+        {
+            p.write(); // Запишет только p
+            // или
+        }
 
         runTime.printExecutionTime(Info);
     }

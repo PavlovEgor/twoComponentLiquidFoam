@@ -2,7 +2,7 @@
     volScalarField rAU(1.0/UEqn.A());
     volVectorField HbyA("HbyA", U);
     HbyA = rAU*UEqn.H();
-
+    surfaceScalarField phiHbyA("phiHbyA", fvc::flux(HbyA));
 
 
     // Define coefficients and pseudo-velocities for RCM interpolation
@@ -13,22 +13,22 @@
     surfaceScalarField rhorAUf
     (
         "rhorAUf",
-        fvc::interpolate(rho)/fvc::interpolate(UEqn.A())
+        1 / (fvc::interpolate(rho)*fvc::interpolate(UEqn.A()))
     );
 
-    surfaceVectorField rhoHbyAf
-    (
-        "rhoHbyAf",
-        fvc::interpolate(rho)*fvc::interpolate(U)
-      + rhorAUf*fvc::interpolate(fvc::grad(p))
-    );
+    // surfaceVectorField rhoHbyAf
+    // (
+    //     "rhoHbyAf",
+    //     fvc::interpolate(rho)*fvc::interpolate(U)
+    //   + rhorAUf*fvc::interpolate(fvc::grad(p))
+    // );
 
     #include "resetBoundaries.H"
 
-    if (pimple.nCorrPISO() <= 1)
-    {
-        tUEqn.clear();
-    }
+    // if (pimple.nCorrPISO() <= 1)
+    // {
+    //     tUEqn.clear();
+    // }
 
     if (pimple.transonic())
     {
@@ -38,18 +38,18 @@
     }
     else
     {
-        // Rhie & Chow interpolation (part 1)
-        surfaceScalarField phiHbyA
-        (
-            "phiHbyA",
-            (
-            //     (rhoHbyAf & mesh.Sf())
-            //   + rhorAUf*fvc::interpolate(rho)*fvc::ddtCorr(U, phiByRho)
-            //   + fvc::interpolate(rho)
-            //   * fvc::alphaCorr(U, phiByRho, pimple.finalInnerIter())
-            fvc::interpolate(rho)*fvc::flux(HbyA)
-            )
-        );
+        // // Rhie & Chow interpolation (part 1)
+        // surfaceScalarField phiHbyA
+        // (
+        //     "phiHbyA",
+        //     (
+        //     //     (rhoHbyAf & mesh.Sf())
+        //     //   + rhorAUf*fvc::interpolate(rho)*fvc::ddtCorr(U, phiByRho)
+        //     //   + fvc::interpolate(rho)
+        //     //   * fvc::alphaCorr(U, phiByRho, pimple.finalInnerIter())
+        //     fvc::interpolate(rho)*fvc::flux(HbyA)
+        //     )
+        // );
 
         // MRF.makeRelative(fvc::interpolate(rho), phiHbyA);
 
@@ -59,31 +59,30 @@
             // Pressure corrector
             fvScalarMatrix pEqn
             (
-                fvc::div(phiHbyA) -
-                fvc::ddt(rho)
-              - fvm::laplacian(rhorAUf, p) 
+                fvm::laplacian(rhorAUf, p) ==
+                (D / rho2) * fvc::laplacian(rho)
+                + fvc::div(phiHbyA)
               
             );
 
             pEqn.solve(p.select(pimple.finalInnerIter()));
 
-            // Rhie & Chow interpolation (part 2)
-            if (pimple.finalNonOrthogonalIter())
-            {
-                phi = phiHbyA + pEqn.flux();
-            }
+            // // Rhie & Chow interpolation (part 2)
+            // if (pimple.finalNonOrthogonalIter())
+            // {
+            //     phi = phiHbyA + pEqn.flux();
+            // }
         }
     }
 
-    phiByRho = phi/fvc::interpolate(rho);
+    // phiByRho = phi/fvc::interpolate(rho);
 
     // #include "rhoEqn.H"
     // #include "compressibleContinuityErrs.H"  
 
     // Explicitly relax pressure for momentum corrector
     p.relax();
-
-    U = HbyA - rAU*fvc::grad(p);
+    U = HbyA - rAU*fvc::grad(p) / rho;
     U.correctBoundaryConditions();
     fvOptions.correct(U);
 }

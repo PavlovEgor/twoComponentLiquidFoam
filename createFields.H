@@ -61,7 +61,7 @@ surfaceScalarField phi
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    linearInterpolate(rho)*linearInterpolate(U) & mesh.Sf()
+    fvc::flux(U)
 );
 
 Info<< "Calculating face flux field phiByRho\n" << endl;
