@@ -1,9 +1,9 @@
-autoPtr<fluidThermo> pThermo
-(
-    fluidThermo::New(mesh)
-);
-fluidThermo& thermo = pThermo();
-thermo.validate(args.executable(), "h", "e");
+// autoPtr<fluidThermo> pThermo
+// (
+//     fluidThermo::New(mesh)
+// );
+// fluidThermo& thermo = pThermo();
+// thermo.validate(args.executable(), "h", "e");
 
         
 Info<< "Reading field rho\n" << endl;
@@ -61,7 +61,7 @@ surfaceScalarField phi
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    fvc::flux(U)
+    linearInterpolate(rho + rho2)*linearInterpolate(U) & mesh.Sf()
 );
 
 Info<< "Calculating face flux field phiByRho\n" << endl;
@@ -76,7 +76,7 @@ surfaceScalarField phiByRho
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    phi/linearInterpolate(rho)
+    fvc::flux(U)
 );
 
 // Info<< "Creating turbulence model\n" << endl;
@@ -93,7 +93,7 @@ surfaceScalarField phiByRho
 
 mesh.setFluxRequired(p.name());
 
-#include "createMRF.H"
+// #include "createMRF.H"
 
 // Info<< "Creating compressibility field psi\n" << endl;
 // volScalarField psi("psi", 1.0/((thermo.Cp() - thermo.Cv())*T));

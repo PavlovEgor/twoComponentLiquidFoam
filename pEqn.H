@@ -10,10 +10,16 @@
     // U = H/A - 1/A grad(p)
     // H/A = U + 1/A grad(p)
 
-    surfaceScalarField rhorAUf
+    // surfaceScalarField rhorAUf
+    // (
+    //     "rhorAUf",
+    //     1 / (fvc::interpolate(rho)*fvc::interpolate(UEqn.A()))
+    // );
+
+    surfaceScalarField rAUf
     (
         "rhorAUf",
-        1 / (fvc::interpolate(rho)*fvc::interpolate(UEqn.A()))
+        1 / (fvc::interpolate(UEqn.A()))
     );
 
     // surfaceVectorField rhoHbyAf
@@ -23,7 +29,7 @@
     //   + rhorAUf*fvc::interpolate(fvc::grad(p))
     // );
 
-    #include "resetBoundaries.H"
+    // #include "resetBoundaries.H"
 
     // if (pimple.nCorrPISO() <= 1)
     // {
@@ -59,9 +65,9 @@
             // Pressure corrector
             fvScalarMatrix pEqn
             (
-                fvm::laplacian(rhorAUf, p) ==
+                fvm::laplacian(rAUf, p) ==
                 (D / rho2) * fvc::laplacian(rho)
-                + fvc::div(phiHbyA)
+                 + fvc::div(phiHbyA)
               
             );
 
@@ -82,9 +88,11 @@
 
     // Explicitly relax pressure for momentum corrector
     p.relax();
-    U = HbyA - rAU*fvc::grad(p) / rho;
+
+    U = HbyA - rAU*fvc::grad(p);
     U.correctBoundaryConditions();
     fvOptions.correct(U);
+
 }
 
 // rho = thermo.rho();

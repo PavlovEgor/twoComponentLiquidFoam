@@ -924,7 +924,6 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createPimpleControl.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createSimpleControl.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createTimeControls.H \
 createFields.H \
-$(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createMRF.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createFvOptions.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readTimeControls.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/compressibleCourantNo.H \
@@ -932,6 +931,5 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/setDeltaT.H \
 UEqn.H \
 rhoEqn_m.H \
 pEqn.H \
-resetBoundaries.H \
 
 #END

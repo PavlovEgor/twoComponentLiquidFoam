@@ -57,6 +57,41 @@ Description
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+
+// Функция для вычисления средней скорости на выходном патче
+void calculateAverageOutletVelocity(const Time& runTime, const fvMesh& mesh)
+{
+    // Имя выходного патча (замените на ваше)
+    const word outletPatchName = "outlet";
+
+    // Проверка, существует ли патч
+    if (!mesh.boundaryMesh().findPatchID(outletPatchName))
+    {
+        Info << "Patch " << outletPatchName << " not found!" << endl;
+        return;
+    }
+
+    // Получение ID патча
+    label outletPatchID = mesh.boundaryMesh().findPatchID(outletPatchName);
+
+    // Получение скорости на патче
+    const volVectorField& U = mesh.lookupObject<volVectorField>("U");
+    const vectorField& Up = U.boundaryField()[outletPatchID];
+
+    // Получение площадей граней патча
+    const scalarField& areas = mesh.boundary()[outletPatchID].magSf();
+
+    // Вычисление средней скорости (взвешенной по площади)
+    scalar sumAreas = gSum(areas);
+    vector sumU = gSum(Up * areas);
+    vector averageU = sumU / sumAreas;
+
+    // Вывод результата
+    Info << "Time = " << runTime.timeName() << ", Average outlet velocity = "
+         << averageU << " m/s" << endl;
+}
+
+
 int main(int argc, char *argv[])
 {
     argList::addNote
@@ -65,6 +100,9 @@ int main(int argc, char *argv[])
         " of weakly compressible fluids for low Mach number"
         " aeroacoustic applications."
     );
+    dimensionedScalar rho2("rho2", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1000.0);
+    dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 2.3e-10);
+    // dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 0.1);
 
     #include "postProcess.H"
 
@@ -83,9 +121,7 @@ int main(int argc, char *argv[])
 
     Info<< "\nStarting time loop\n" << endl;
 
-    dimensionedScalar rho2("rho2", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1000.0);
-    // dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 2.3e-10);
-    dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 0.1);
+
 
     while (runTime.run())
     {
@@ -103,13 +139,14 @@ int main(int argc, char *argv[])
         // }
 
         // --- Pressure-velocity PIMPLE corrector loop
+
         while (pimple.loop())
         {
             U.storePrevIter();
             rho.storePrevIter();
             phi.storePrevIter();
             phiByRho.storePrevIter();
-            // p.storePrevIter();
+            p.storePrevIter();
 
             #include "UEqn.H"
             #include "rhoEqn_m.H"
@@ -136,6 +173,8 @@ int main(int argc, char *argv[])
             p.write(); // Запишет только p
             // или
         }
+
+        // calculateAverageOutletVelocity(runTime, mesh);
 
         runTime.printExecutionTime(Info);
     }

@@ -13,6 +13,8 @@
         "fvSchemes": "OpenFOAM",
         "fvSolution": "OpenFOAM",
         "**/constant/g": "OpenFOAM",
-        "**/0/*": "OpenFOAM"
+        "**/0/*": "OpenFOAM",
+        "postProcessOutletVelocity.C": "cpp",
+        "functionObjectTemplate.C": "cpp"
     }
 }

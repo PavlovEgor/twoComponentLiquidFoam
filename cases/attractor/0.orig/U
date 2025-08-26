@@ -22,7 +22,11 @@ boundaryField
 {
     top
     {
-        type            noSlip;
+        // type            noSlip;
+
+        type               zeroGradient;
+
+        
         // type            codedFixedValue;
         // value           uniform (0 0 0); // начальное значение (не важно, будет переопределено кодом)
 
@@ -63,27 +67,27 @@ boundaryField
 
         left
     {
-        // type            fixedValue;
-        // value           uniform (0 0 0);
+        type            fixedValue;
+        value           uniform (0 0 0);
 
-	type  codedFixedValue;
-	name  increaseToFixedValue;
-	code
-	   #{
-               const vectorField& Cf = patch().Cf();
-               vectorField& field    = *this;
-               const scalar a0 = 0.11* 0.001;
-               const scalar w0 = 0.628;
-               const scalar H  = 0.4;
-               const scalar pi = constant::mathematical::pi;
+	// type  codedFixedValue;
+	// name  increaseToFixedValue;
+	// code
+	//    #{
+    //            const vectorField& Cf = patch().Cf();
+    //            vectorField& field    = *this;
+    //            const scalar a0 = 0.11* 0.001;
+    //            const scalar w0 = 0.628;
+    //            const scalar H  = 0.4;
+    //            const scalar pi = constant::mathematical::pi;
 									             
-               forAll(Cf, faceI)
-               {
-                   const scalar y = Cf[faceI][1];
-                   const scalar t = this->db().time().value();
-                   field[faceI]   = vector(a0*w0*sin(2*pi*y/H)*cos(w0*t),0,0);
-               }
-         #};//*/
+    //            forAll(Cf, faceI)
+    //            {
+    //                const scalar y = Cf[faceI][1];
+    //                const scalar t = this->db().time().value();
+    //                field[faceI]   = vector(a0*w0*sin(2*pi*y/H)*cos(w0*t),0,0);
+    //            }
+    //      #};//*/
 
 
     }

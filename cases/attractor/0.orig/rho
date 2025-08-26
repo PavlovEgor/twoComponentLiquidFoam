@@ -16,51 +16,51 @@ FoamFile
 
 dimensions      [1 -3 0 0 0 0 0];
 
-internalField uniform 1040.0;
+// internalField uniform 1040.0;
 
-// internalField  #codeStream  /* Use of codeStream to initialize p field */
-// {
-//   codeInclude  /* Headers for compilation */
-//   #{
-//   #include "fvCFD.H"
-//   #};
+internalField  #codeStream  /* Use of codeStream to initialize p field */
+{
+  codeInclude  /* Headers for compilation */
+  #{
+  #include "fvCFD.H"
+  #};
 
-//   codeOptions /* Compilation options */
-//   #{
-//     -I$(FOAM_SRC)/finiteVolume/lnInclude \
-//     -I$(FOAM_SRC)/meshTools/lnInclude 
-//   #};
+  codeOptions /* Compilation options */
+  #{
+    -I$(FOAM_SRC)/finiteVolume/lnInclude \
+    -I$(FOAM_SRC)/meshTools/lnInclude 
+  #};
 
-//   codeLibs  /* Libraries for compilation */
-//   #{
-//     -lmeshTools \
-//     -lfiniteVolume
-//   #};
+  codeLibs  /* Libraries for compilation */
+  #{
+    -lmeshTools \
+    -lfiniteVolume
+  #};
 
-//   code  /* User code */
-//   #{
-//     /* Access to internal mesh information */
-//     const IOdictionary& d = static_cast<const IOdictionary&>(dict);
-//     const fvMesh& mesh = refCast<const fvMesh>(d.db());
+  code  /* User code */
+  #{
+    /* Access to internal mesh information */
+    const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+    const fvMesh& mesh = refCast<const fvMesh>(d.db());
 
-//     scalarField rho(mesh.nCells(), 0.); /* initialization */
+    scalarField rho(mesh.nCells(), 0.); /* initialization */
 
-//     /* User variables initialization */
-//     const scalar rho0 = 1000.0;
-//     const scalar drho = 40.0;
-//     const scalar H = 0.4;    // H — характерная высота
+    /* User variables initialization */
+    const scalar rho0 = 1000.0;
+    const scalar drho = 4.0;
+    const scalar H = 0.4;    // H — характерная высота
 
 
-//     forAll(rho, i) /* Loop on elements */
-//     {
-//       const scalar y = mesh.C()[i][1]; /* Access to z component of cell centers coordinates */
-//       rho[i] = rho0 + drho * (1 - y / H);
-//     }
+    forAll(rho, i) /* Loop on elements */
+    {
+      const scalar y = mesh.C()[i][1]; /* Access to z component of cell centers coordinates */
+      rho[i] = drho * (1 - y / H);
+    }
 
-//     rho.writeEntry("", os); /* Write output in the dictionary */
+    rho.writeEntry("", os); /* Write output in the dictionary */
 
-//   #};
-// };
+  #};
+};
 
 boundaryField
 {

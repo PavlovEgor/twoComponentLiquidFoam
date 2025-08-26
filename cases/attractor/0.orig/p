@@ -17,6 +17,49 @@ FoamFile
 dimensions      [1 -1 -2 0 0 0 0];
 
 internalField   uniform 0;
+// internalField  #codeStream  /* Use of codeStream to initialize p field */
+// {
+//   codeInclude  /* Headers for compilation */
+//   #{
+//   #include "fvCFD.H"
+//   #};
+
+//   codeOptions /* Compilation options */
+//   #{
+//     -I$(FOAM_SRC)/finiteVolume/lnInclude \
+//     -I$(FOAM_SRC)/meshTools/lnInclude 
+//   #};
+
+//   codeLibs  /* Libraries for compilation */
+//   #{
+//     -lmeshTools \
+//     -lfiniteVolume
+//   #};
+
+//   code  /* User code */
+//   #{
+//     /* Access to internal mesh information */
+//     const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+//     const fvMesh& mesh = refCast<const fvMesh>(d.db());
+
+//     scalarField p(mesh.nCells(), 0.); /* initialization */
+
+//     /* User variables initialization */
+//     const scalar drho = 4.0;
+//     const scalar g = 9.81;
+//     const scalar H = 0.4;    // H — характерная высота
+
+
+//     forAll(p, i) /* Loop on elements */
+//     {
+//       const scalar y = mesh.C()[i][1]; /* Access to z component of cell centers coordinates */
+//       p[i] = g * drho * (H - y) * (1 - (H + y) / (2 * H));
+//     }
+
+//     p.writeEntry("", os); /* Write output in the dictionary */
+
+//   #};
+// };
 
 boundaryField
 {

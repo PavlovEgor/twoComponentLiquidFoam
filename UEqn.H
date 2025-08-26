@@ -3,6 +3,8 @@
 // MRF.correctBoundaryVelocity(U);
 
 dimensionedScalar nu("nu", dimensionSet(0, 2, -1, 0, 0, 0, 0), 1e-6);
+dimensionedScalar mu("mu", dimensionSet(1, -1, -1, 0, 0, 0, 0), 1e-3);
+
 const scalar half = 0.5;
 
 volVectorField g(
@@ -17,13 +19,14 @@ volVectorField g(
     dimensionedVector("g", dimAcceleration, vector(0, -9.81, 0)) // Пример: гравитация вниз по оси Y
 );
 
+phi = linearInterpolate(rho + rho2)*linearInterpolate(U) & mesh.Sf();
 
 fvVectorMatrix UEqn
 (
-    fvm::ddt(U) + fvm::div(phi, U)
+    fvm::ddt(rho + rho2, U) + fvm::div(phi, U)
   // + MRF.DDt(rho, U)
   // + turbulence->divDevRhoReff(U)
-  -  nu * fvm::laplacian(U) + half * nu * fvc::grad(fvc::div(U)) - g
+  -  mu * fvm::laplacian(U) + half * mu * fvc::grad(fvc::div(U)) - rho * g
 );
 // fvVectorMatrix& UEqn = tUEqn.ref();
 
@@ -33,7 +36,7 @@ UEqn.relax();
 
 if (pimple.momentumPredictor())
 {
-    solve(UEqn == - (1 / rho) * fvc::grad(p));
+    solve(UEqn == - fvc::grad(p));
 
     // fvOptions.correct(U);
 }
