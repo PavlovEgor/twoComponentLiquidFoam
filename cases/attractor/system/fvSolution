@@ -70,8 +70,8 @@ PIMPLE
 {
     momentumPredictor          yes;
     nOuterCorrectors           1;
-    nCorrectors                1;
-    nNonOrthogonalCorrectors   0;
+    nCorrectors                2;
+    nNonOrthogonalCorrectors   2;
 }
 
 

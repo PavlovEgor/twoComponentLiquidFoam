@@ -10,81 +10,28 @@
     // U = H/A - 1/A grad(p)
     // H/A = U + 1/A grad(p)
 
-    // surfaceScalarField rhorAUf
-    // (
-    //     "rhorAUf",
-    //     1 / (fvc::interpolate(rho)*fvc::interpolate(UEqn.A()))
-    // );
-
     surfaceScalarField rAUf
     (
         "rhorAUf",
         1 / (fvc::interpolate(UEqn.A()))
     );
 
-    // surfaceVectorField rhoHbyAf
-    // (
-    //     "rhoHbyAf",
-    //     fvc::interpolate(rho)*fvc::interpolate(U)
-    //   + rhorAUf*fvc::interpolate(fvc::grad(p))
-    // );
-
-    // #include "resetBoundaries.H"
-
-    // if (pimple.nCorrPISO() <= 1)
-    // {
-    //     tUEqn.clear();
-    // }
-
-    if (pimple.transonic())
+    // Non-orthogonal pressure corrector loop
+    while (pimple.correctNonOrthogonal())
     {
-         FatalError
-             << "\nTransonic option not available for " << args.executable()
-             << exit(FatalError);
+        // Pressure corrector
+        fvScalarMatrix pEqn
+        (
+            fvm::laplacian(rAUf, p) ==
+            (D / rho0) * fvc::laplacian(rho)
+                + fvc::div(phiHbyA)
+            
+        );
+
+        pEqn.solve(p.select(pimple.finalInnerIter()));
+
+
     }
-    else
-    {
-        // // Rhie & Chow interpolation (part 1)
-        // surfaceScalarField phiHbyA
-        // (
-        //     "phiHbyA",
-        //     (
-        //     //     (rhoHbyAf & mesh.Sf())
-        //     //   + rhorAUf*fvc::interpolate(rho)*fvc::ddtCorr(U, phiByRho)
-        //     //   + fvc::interpolate(rho)
-        //     //   * fvc::alphaCorr(U, phiByRho, pimple.finalInnerIter())
-        //     fvc::interpolate(rho)*fvc::flux(HbyA)
-        //     )
-        // );
-
-        // MRF.makeRelative(fvc::interpolate(rho), phiHbyA);
-
-        // Non-orthogonal pressure corrector loop
-        while (pimple.correctNonOrthogonal())
-        {
-            // Pressure corrector
-            fvScalarMatrix pEqn
-            (
-                fvm::laplacian(rAUf, p) ==
-                (D / rho2) * fvc::laplacian(rho)
-                 + fvc::div(phiHbyA)
-              
-            );
-
-            pEqn.solve(p.select(pimple.finalInnerIter()));
-
-            // // Rhie & Chow interpolation (part 2)
-            // if (pimple.finalNonOrthogonalIter())
-            // {
-            //     phi = phiHbyA + pEqn.flux();
-            // }
-        }
-    }
-
-    // phiByRho = phi/fvc::interpolate(rho);
-
-    // #include "rhoEqn.H"
-    // #include "compressibleContinuityErrs.H"  
 
     // Explicitly relax pressure for momentum corrector
     p.relax();
@@ -95,4 +42,3 @@
 
 }
 
-// rho = thermo.rho();

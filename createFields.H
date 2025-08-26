@@ -1,11 +1,45 @@
-// autoPtr<fluidThermo> pThermo
-// (
-//     fluidThermo::New(mesh)
-// );
-// fluidThermo& thermo = pThermo();
-// thermo.validate(args.executable(), "h", "e");
 
-        
+Info << "Reading caseProperties" << endl;
+IOdictionary caseProperties
+(
+    IOobject
+    (
+        "caseProperties",
+        runTime.constant(),
+        mesh,
+        IOobject::MUST_READ_IF_MODIFIED,
+        IOobject::NO_WRITE
+    )
+);
+
+dimensionedScalar rho0
+(
+    "rho0", caseProperties
+);
+
+dimensionedScalar nu
+(
+    "nu", caseProperties
+);
+
+dimensionedScalar D
+(
+    "D", caseProperties
+);
+
+dimensionedVector g
+(
+    "g", caseProperties
+);
+
+dimensionedScalar mu = nu * rho0;
+
+
+Info << "rho0: "    << rho0.value()     << endl;
+Info << "nu: "      << nu.value()       << endl;
+Info << "D: "       << D.value()        << endl;
+Info << "g: "       << g.value()        << endl;
+
 Info<< "Reading field rho\n" << endl;
 volScalarField rho
 (
@@ -61,7 +95,7 @@ surfaceScalarField phi
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    linearInterpolate(rho + rho2)*linearInterpolate(U) & mesh.Sf()
+    linearInterpolate(rho + rho0)*linearInterpolate(U) & mesh.Sf()
 );
 
 Info<< "Calculating face flux field phiByRho\n" << endl;
@@ -79,23 +113,6 @@ surfaceScalarField phiByRho
     fvc::flux(U)
 );
 
-// Info<< "Creating turbulence model\n" << endl;
-// autoPtr<compressible::turbulenceModel> turbulence
-// (
-//     compressible::turbulenceModel::New
-//     (
-//         rho,
-//         U,
-//         phi,
-//         thermo
-//     )
-// );
 
 mesh.setFluxRequired(p.name());
 
-// #include "createMRF.H"
-
-// Info<< "Creating compressibility field psi\n" << endl;
-// volScalarField psi("psi", 1.0/((thermo.Cp() - thermo.Cv())*T));
-// psi.oldTime() = 1.0/((thermo.Cp() - thermo.Cv())*T.oldTime());
-// psi.oldTime().oldTime() = 1.0/((thermo.Cp()-thermo.Cv())*T.oldTime().oldTime());

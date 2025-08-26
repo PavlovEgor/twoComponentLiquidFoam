@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application       MyrhoPimpleAdiabaticFoam;
+application       twoComponentLiquidFoam;
 
 startFrom         startTime;
 

@@ -100,9 +100,6 @@ int main(int argc, char *argv[])
         " of weakly compressible fluids for low Mach number"
         " aeroacoustic applications."
     );
-    dimensionedScalar rho2("rho2", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1000.0);
-    dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 2.3e-10);
-    // dimensionedScalar D("D", dimensionSet(0, 2, -1, 0, 0, 0, 0), 0.1);
 
     #include "postProcess.H"
 
@@ -133,11 +130,6 @@ int main(int argc, char *argv[])
 
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
-        // if (pimple.nCorrPIMPLE() <= 1)
-        // {
-        //     #include "rhoEqn_m.H"
-        // }
-
         // --- Pressure-velocity PIMPLE corrector loop
 
         while (pimple.loop())
@@ -154,24 +146,15 @@ int main(int argc, char *argv[])
             // --- Pressure corrector loop
             while (pimple.correct())
             {
-                // Info<< "Time = before pEqn.h" << nl << endl;
                 #include "pEqn.H"
             }
 
-
-            // if (pimple.turbCorr())
-            // {
-            //     turbulence->correct();
-            // }
         }
-    // Info << "p[253] = " << p[253] << Foam::endl; 
 
         runTime.write();
-        // В любом месте кода:
         if (runTime.outputTime())
         {
-            p.write(); // Запишет только p
-            // или
+            p.write(); 
         }
 
         // calculateAverageOutletVelocity(runTime, mesh);

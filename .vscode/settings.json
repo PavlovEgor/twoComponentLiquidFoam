@@ -15,6 +15,16 @@
         "**/constant/g": "OpenFOAM",
         "**/0/*": "OpenFOAM",
         "postProcessOutletVelocity.C": "cpp",
-        "functionObjectTemplate.C": "cpp"
+        "functionObjectTemplate.C": "cpp",
+        "twoComponentLiquidFoam.C": "cpp",
+        "random": "cpp",
+        "chrono": "cpp",
+        "compare": "cpp",
+        "functional": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "variant": "cpp"
     }
 }

@@ -24,39 +24,39 @@ boundaryField
     {
         // type            noSlip;
 
-        type               zeroGradient;
+        // type               zeroGradient;
 
         
-        // type            codedFixedValue;
-        // value           uniform (0 0 0); // начальное значение (не важно, будет переопределено кодом)
+        type            codedFixedValue;
+        value           uniform (0 0 0); // начальное значение (не важно, будет переопределено кодом)
 
-        // // Name of generated boundary condition
-        // name    rampedFixedValue;
+        // Name of generated boundary condition
+        name    rampedFixedValue;
 
-        // code
-        // #{
-        //     // Параметры:
-        //     const scalar a = 0.02;          // амплитуда a
-        //     const scalar omega0 = 0.718;    // частота ω₀
-        //     const scalar L = 0.6;          // длина L
-        //     const scalar pi = 3.141595;          // длина L
+        code
+        #{
+            // Параметры:
+            const scalar a = 0.02;          // амплитуда a
+            const scalar omega0 = 0.718;    // частота ω₀
+            const scalar L = 0.6;          // длина L
+            const scalar pi = 3.141595;          // длина L
 
-        //     // Текущее время:
-        //     const scalar t = this->db().time().value();
+            // Текущее время:
+            const scalar t = this->db().time().value();
 
-        //     // Координата x (предполагаем, что граница вдоль оси x)
-        //     // Для каждой точки границы:
-        //     const vectorField& faceCenters = patch().Cf();
-        //     vectorField result(faceCenters.size(), vector::zero);
+            // Координата x (предполагаем, что граница вдоль оси x)
+            // Для каждой точки границы:
+            const vectorField& faceCenters = patch().Cf();
+            vectorField result(faceCenters.size(), vector::zero);
 
-        //     forAll(faceCenters, faceI)
-        //     {
-        //         scalar x = faceCenters[faceI].x(); // координата x точки на границе
-        //         result[faceI].y() = a * omega0 * cos(2 * pi * x / L) * sin(omega0 * t);
-        //     }
+            forAll(faceCenters, faceI)
+            {
+                scalar x = faceCenters[faceI].x(); // координата x точки на границе
+                result[faceI].y() = a * omega0 * cos(2 * pi * x / L) * sin(omega0 * t);
+            }
 
-        //     operator==(result);
-        // #};
+            operator==(result);
+        #};
 
     }
 
@@ -67,8 +67,10 @@ boundaryField
 
         left
     {
-        type            fixedValue;
-        value           uniform (0 0 0);
+        // type            fixedValue;
+        // value           uniform (0 0 0);
+
+        type            noSlip;
 
 	// type  codedFixedValue;
 	// name  increaseToFixedValue;

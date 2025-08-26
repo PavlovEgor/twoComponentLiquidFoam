@@ -9,28 +9,15 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      T;
+    class       dictionary;
+    object      caseProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
-
-internalField   uniform 300;
-
-boundaryField
-{
-    ".*"
-    {
-        type            calculated;
-        value           $internalField;
-    }
-
-    frontAndBack
-    {
-        type            empty;
-    }
-}
+rho0    rho0    [1 -3 0 0 0 0 0] 1000.0; 
+nu      nu      [0 2 -1 0 0 0 0] 1.48e-05; 
+D       D       [0 2 -1 0 0 0 0] 2.3e-10; 
+g       g       [0 1 -2 0 0 0 0] (0 -9.81 0);
 
 
 // ************************************************************************* //

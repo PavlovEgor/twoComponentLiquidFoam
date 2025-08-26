@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application       MyrhoPimpleAdiabaticFoam;
+application       twoComponentLiquidFoam;
 
 startFrom         startTime;
 
@@ -22,13 +22,13 @@ startTime         0;
 
 stopAt            endTime;
 
-endTime           2.0;
+endTime           6.0;
 
-deltaT            1e-4;
+deltaT            8e-6;
 
 writeControl      timeStep;
 
-writeInterval     1;
+writeInterval     10;
 
 // endTime         600;
 

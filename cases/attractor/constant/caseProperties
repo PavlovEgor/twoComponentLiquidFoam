@@ -10,43 +10,15 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      thermophysicalProperties;
+    object      caseProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-thermoType
-{
-    type            hePsiThermo;
-    mixture         pureMixture;
-    transport       const;
-    thermo          hConst;
-    equationOfState perfectGas;
-    specie          specie;
-    energy          sensibleEnthalpy;
-}
-
-mixture
-{
-    equationOfState
-    {
-        p0          103308.85730683322;
-        T0          225.24440406165331;
-    }
-    specie
-    {
-        molWeight   28.970278977370906;
-    }
-    thermodynamics
-    {
-        Cp          1004.5;
-        Hf          0;
-    }
-    transport
-    {
-        mu          1.4585464649816414e-05;
-        Pr          0.7179;
-    }
-}
+rho0    rho0    [1 -3 0 0 0 0 0] 1000.0; 
+// nu      nu      [0 2 -1 0 0 0 0] 1.48e-05; 
+nu      nu      [0 2 -1 0 0 0 0] 1.0e-06;
+D       D       [0 2 -1 0 0 0 0] 2.3e-10; 
+g       g       [0 1 -2 0 0 0 0] (0 -9.81 0);
 
 
 // ************************************************************************* //

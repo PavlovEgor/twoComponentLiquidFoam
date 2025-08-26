@@ -26,17 +26,17 @@ regions
     //     );
     // }
 
-    cylinderToCell
-    {
-        p1 (0.005 0.005 -1);
-        p2 (0.005 0.005 1);
-        radius 0.005;
-        fieldValues
-        (
-            volScalarFieldValue rho 2.0
-        );
+    // cylinderToCell
+    // {
+    //     p1 (0.005 0.005 -1);
+    //     p2 (0.005 0.005 1);
+    //     radius 0.005;
+    //     fieldValues
+    //     (
+    //         volScalarFieldValue rho 2.0
+    //     );
 
-    }
+    // }
 );
 
 // ************************************************************************* //
