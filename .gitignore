@@ -20,3 +20,5 @@ postProcessing/
 # Другие временные файлы
 *.bak
 *.swp
+
+Make/linux64GccDPInt32Opt
