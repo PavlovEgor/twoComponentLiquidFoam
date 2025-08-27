@@ -5,13 +5,12 @@ An OpenFOAM solver for simulating two-component liquid flows with constant densi
 ---
 
 ## **Description**
-`twoComponentLiquidFoam` is a custom OpenFOAM solver designed to model the flow of **two immiscible liquids** with **constant densities**. The solver is based on the **Volume of Fluid (VoF)** method and is suitable for simulating multiphase flows, such as liquid-liquid interactions, sloshing, or mixing processes.
+`twoComponentLiquidFoam` is a custom OpenFOAM solver designed to model the flow of **two mixed liquids** with **constant densities**. The solver is based on the **Volume of Fluid (VoF)** method and is suitable for simulating mixing processes.
 
 ---
 
 ## **Features**
 - Simulates **two-component liquid flows** with constant densities.
-- Uses the **VoF method** to track the interface between the two liquids.
 - Supports **transient simulations** with adjustable time stepping.
 - Compatible with OpenFOAM's standard boundary conditions and turbulence models.
 
