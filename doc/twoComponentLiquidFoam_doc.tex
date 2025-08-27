@@ -1,0 +1,83 @@
+\documentclass{article}
+% !TEX root = twoComponentLiquidFoam_doc.tex
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{twoComponentLiquidFoam Solver}
+\author{Pavlov Egor}
+
+\begin{document}
+\maketitle
+\section{Introduction}
+The \texttt{twoComponentLiquidFoam} solver is designed to simulate the flow of two mixed liquids with constant densities. The solver is based on the Volume of Fluid (VoF) method and solves the following governing equations.
+
+Variables: $\mathbf{U}$ is the total velocity, $p$ is the pressure taking into account the hydrostatic pressure from the one of the components $\rho_0$, and $\rho$ is the difference between the density at a point and the density of one of the components $\rho_0$.
+
+Suppose there are two components in the mixture with pure densities $\rho_0$ 
+and $\rho_1$, we introduce the mass fraction of the second component $Y$, 
+then the total density can be expressed in terms of the previously 
+introduced variables:
+
+\begin{equation}
+    \rho + \rho_0 = \cfrac{1}{\cfrac{Y}{\rho_1} + \cfrac{1 - Y}{\rho_0}}
+\end{equation}
+
+Or vice versa, expressing $Y$ in terms of density:
+
+\begin{equation}\label{Y_rho}
+    Y = \cfrac{\rho_1}{\rho_1 - \rho_0} (1 - \cfrac{\rho_0}{\rho + \rho_0})
+\end{equation}
+
+\section{Governing Equations}
+
+\subsection{Transfer equation}
+
+The transfer equation for the mass fraction $Y$:
+
+\begin{equation}\label{YEqn}
+    \frac{\partial (\rho_0 + \rho) Y}{\partial t} + \nabla \cdot ( (\rho + \rho_0) \mathbf{U} Y) = \nabla \cdot D \nabla (\rho_0 + \rho) Y
+\end{equation}
+where $D$ is the diffusion coefficient. Now using (\ref{Y_rho}) we get the expression for $(\rho + \rho_0) Y$:
+
+\begin{equation}
+    (\rho + \rho_0) Y = \cfrac{\rho_1 \rho }{\rho_1 - \rho_0} 
+\end{equation}
+Substituting into equation (\ref{YEqn}) and reducing by a constant value, we obtain:
+
+\begin{equation}\label{rhoEqn}
+    \frac{\partial \rho}{\partial t} + \nabla \cdot ( \rho  \mathbf{U}) = \nabla \cdot D \nabla \rho = D \Delta \rho
+\end{equation}
+
+\subsection{Mass Conservation (Continuity Equation)}
+The continuity equation is given by:
+
+\begin{equation}
+\frac{\partial (\rho_0 + \rho)}{\partial t} + \nabla \cdot ( (\rho + \rho_0) \mathbf{U}) = \frac{\partial \rho}{\partial t} + \nabla \cdot ( \rho \mathbf{U}) + \rho_0 \nabla \cdot {\mathbf{U}} = 0
+\end{equation}
+Subtracting (\ref{rhoEqn}) we get:
+
+\begin{equation}
+ \rho_0 \nabla \cdot {\mathbf{U}} = - D \Delta \rho
+\end{equation}
+
+\subsection{Momentum Conservation (Navier-Stokes Equation)}
+
+The momentum equation for the mixture is:
+
+\begin{equation}
+\frac{\partial ((\rho_0 + \rho) \mathbf{U})}{\partial t} + \nabla \cdot ((\rho_0 + \rho) \mathbf{U} \otimes \mathbf{U}) = -\nabla p
++ \nabla \cdot \left[ \mu (\nabla \mathbf{U} + (\nabla \mathbf{U})^T) \right] + \rho \mathbf{g}
+\end{equation}
+Once again, let us recall that p already takes into account the hydrostatic pressure with a density of $\rho_0$, so gravity only includes $\rho$.
+
+\end{document}
