@@ -10,13 +10,14 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      transportProperties;
+    object      caseProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-transportModel  Newtonian;
-
-nu              1e-05;
+rho0    rho0    [1 -3 0 0 0 0 0] 1.0; 
+nu      nu      [0 2 -1 0 0 0 0] 1.48e-05; 
+D       D       [0 2 -1 0 0 0 0] 2.3e-10; 
+g       g       [0 1 -2 0 0 0 0] (0 -9.81 0);
 
 
 // ************************************************************************* //

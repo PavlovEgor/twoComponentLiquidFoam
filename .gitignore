@@ -22,3 +22,5 @@ postProcessing/
 *.swp
 
 Make/linux64GccDPInt32Opt
+
+*/polyMesh/

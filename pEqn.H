@@ -12,7 +12,7 @@
 
     surfaceScalarField rAUf
     (
-        "rhorAUf",
+        "rAUf",
         1 / (fvc::interpolate(UEqn.A()))
     );
 

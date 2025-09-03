@@ -1,0 +1,1 @@
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/librampedFixedValue_14670a4d605a4f4deb32367ee792478f1ca5bf97

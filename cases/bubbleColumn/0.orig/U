@@ -16,7 +16,51 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (0 0 0);
+// internalField   uniform (0 0 0);
+
+internalField  #codeStream  /* Use of codeStream to initialize p field */
+{
+  codeInclude  /* Headers for compilation */
+  #{
+  #include "fvCFD.H"
+  #};
+
+  codeOptions /* Compilation options */
+  #{
+    -I$(FOAM_SRC)/finiteVolume/lnInclude \
+    -I$(FOAM_SRC)/meshTools/lnInclude 
+  #};
+
+  codeLibs  /* Libraries for compilation */
+  #{
+    -lmeshTools \
+    -lfiniteVolume
+  #};
+
+  code  /* User code */
+  #{
+    /* Access to internal mesh information */
+    const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+    const fvMesh& mesh = refCast<const fvMesh>(d.db());
+
+    vectorField U(mesh.nCells()); /* initialization */
+
+    /* User variables initialization */
+    const scalar U0 = 0.2;          // амплитуда a
+    const scalar L = 0.15;          // длина L
+
+
+    forAll(U, i) /* Loop on elements */
+    {
+      const scalar x = mesh.C()[i][0]; /* Access to z component of cell centers coordinates */
+      U[i].y() = U0 * (1 - ((x - (L/2)) / (L/2)) * ((x - (L/2)) / (L/2)));
+    }
+
+    U.writeEntry("", os); /* Write output in the dictionary */
+
+  #};
+};
+
 
 boundaryField
 {
@@ -27,8 +71,35 @@ boundaryField
 
     bottom
     {
-        type            noSlip;
+
+        type            codedFixedValue;
+        value           uniform (0 0 0); // начальное значение (не важно, будет переопределено кодом)
+
+        // Name of generated boundary condition
+        name    rampedFixedValue;
+
+        code
+        #{
+            // Параметры:
+            const scalar U0 = 0.2;          // амплитуда a
+            const scalar L = 0.15;          // длина L
+
+
+            // Для каждой точки границы:
+            const vectorField& faceCenters = patch().Cf();
+            vectorField result(faceCenters.size(), vector::zero);
+
+            forAll(faceCenters, faceI)
+            {
+                scalar x = faceCenters[faceI].x(); // координата x точки на границе
+                result[faceI].y() = U0 * (1 - ((x - (L/2)) / (L/2)) * ((x - (L/2)) / (L/2)));
+            }
+
+            operator==(result);
+        #};
+
     }
+
 
     left
     {
