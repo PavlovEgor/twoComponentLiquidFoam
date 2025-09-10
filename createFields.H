@@ -116,3 +116,106 @@ surfaceScalarField phiByRho
 
 mesh.setFluxRequired(p.name());
 
+
+// IOdictionary turbulenceProperties
+// (
+//     IOobject
+//     (
+//         "turbulenceProperties",
+//         runTime.constant(),
+//         mesh,
+//         IOobject::MUST_READ_IF_MODIFIED,
+//         IOobject::NO_WRITE
+//     )
+// );
+
+// word simulationType = turbulenceProperties.lookup("simulationType").get<word>();
+
+// dimensionedScalar C_mu
+// (
+//     "C_mu", caseProperties
+// );
+
+// dimensionedScalar C_e1
+// (
+//     "C_e1", caseProperties
+// );
+
+// dimensionedScalar C_e2
+// (
+//     "C_e2", caseProperties
+// );
+
+// dimensionedScalar sig_k
+// (
+//     "sig_k", caseProperties
+// );
+
+// dimensionedScalar sig_e
+// (
+//     "sig_e", caseProperties
+// );
+
+// Info << "Create turbulence fields\n"  << endl;
+
+// volScalarField k
+// (
+//     IOobject
+//     (
+//         "k",
+//         runTime.timeName(),
+//         mesh,
+//         IOobject::MUST_READ,
+//         IOobject::AUTO_WRITE
+//     ),
+//     mesh
+// );
+
+// volScalarField eps
+// (
+//     IOobject
+//     (
+//         "eps",
+//         runTime.timeName(),
+//         mesh,
+//         IOobject::MUST_READ,
+//         IOobject::AUTO_WRITE
+//     ),
+//     mesh
+// );
+
+// volScalarField mu_t
+// (
+//     IOobject
+//     (
+//         "mu_t",
+//         runTime.timeName(),
+//         mesh,
+//         IOobject::NO_READ,
+//         IOobject::NO_WRITE
+//     ),
+//     (rho0 + rho) * C_mu * (k * k) / eps
+// );
+
+// volTensorField gradU = fvc::grad(U);
+
+// volTensorField devR
+// (
+//     IOobject
+//     (
+//         "devR",                
+//         runTime.timeName(), 
+//         mesh,               
+//         IOobject::NO_READ,
+//         IOobject::NO_WRITE
+//     ),
+//     mu_t * 0.5 * (gradU + gradU.T()) - (2/3) * mu_t * fvc::div(U) * tensor::I                    
+// );
+
+
+singlePhaseTransportModel laminarTransport(U, phiByRho);
+
+autoPtr<incompressible::turbulenceModel> turbulence
+(
+    incompressible::turbulenceModel::New(U, phiByRho, laminarTransport)
+);

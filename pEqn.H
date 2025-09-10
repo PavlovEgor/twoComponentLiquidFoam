@@ -1,7 +1,6 @@
 {
     volScalarField rAU(1.0/UEqn.A());
-    volVectorField HbyA("HbyA", U);
-    HbyA = rAU*UEqn.H();
+    volVectorField HbyA(constrainHbyA(rAU*UEqn.H(), U, p));
     surfaceScalarField phiHbyA("phiHbyA", fvc::flux(HbyA));
 
 
@@ -38,7 +37,7 @@
 
     U = HbyA - rAU*fvc::grad(p);
     U.correctBoundaryConditions();
-    fvOptions.correct(U);
+    // fvOptions.correct(U);
 
 }
 

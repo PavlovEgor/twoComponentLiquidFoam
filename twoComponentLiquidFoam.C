@@ -46,14 +46,12 @@ Description
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
-#include "fluidThermo.H"
-#include "turbulentFluidThermoModel.H"
 #include "bound.H"
+#include "singlePhaseTransportModel.H"
+#include "turbulentTransportModel.H"
 #include "pimpleControl.H"
 #include "fvOptions.H"
-
 #include "ddtScheme.H"
-#include "fvcCorrectAlpha.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -142,11 +140,19 @@ int main(int argc, char *argv[])
 
             #include "UEqn.H"
             #include "rhoEqn_m.H"
+            
+            // #include "keEqn.H"
 
             // --- Pressure corrector loop
             while (pimple.correct())
             {
                 #include "pEqn.H"
+            }
+
+            if (pimple.turbCorr())
+            {
+                laminarTransport.correct();
+                turbulence->correct();
             }
 
         }
