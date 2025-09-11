@@ -16,6 +16,7 @@ FoamFile
 
 ddtSchemes
 {
+    // Note: setting coefficient to 1 for the rhoPimpleAdiabaticFoam solver
     default         Euler;
 }
 
@@ -28,24 +29,24 @@ divSchemes
 {
     default         none;
 
-    div(phi,U)      Gauss linearUpwind grad(U);
-
-    turbulence      Gauss upwind;
-    div(phi,k)      $turbulence;
-    div(phi,epsilon) $turbulence;
-    div(phi,nuTilda) $turbulence;
-    div(phi,R)      $turbulence;
-    div(R)          Gauss linear;
-        div(phiByRho,rho) Gauss upwind;//linear;
+    div(phi,U)      Gauss upwind;// LUST grad(U);
+    div(phi,rho)    Gauss upwind;//linear;
+    div(phiByRho,rho) Gauss upwind;//linear;
     div(phiByRho,U)   Gauss upwind;//linear;
 
-    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    div((nuEff*dev2(T(grad(U)))))       Gauss linear;
+    div(phi,k)      Gauss upwind;// LUST grad(U);
+    div(phi,eps)      Gauss upwind;// LUST grad(U);
+
+    div(phiByRho,epsilon) Gauss upwind;// LUST grad(U);
+    div(phiByRho,k) Gauss upwind;// LUST grad(U);
+
     div(U)          Gauss linear;
 }
 
 laplacianSchemes
 {
-    default         Gauss linear corrected;
+    default         Gauss linear orthogonal;
 }
 
 interpolationSchemes

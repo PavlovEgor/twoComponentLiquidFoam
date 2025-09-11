@@ -10,50 +10,19 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      fvSolution;
+    object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-solvers
+simulationType      RAS;
+
+RAS
 {
-    "(p)"
-    {
-        solver          PCG;
-        preconditioner  DIC;
-        tolerance       1e-9;
-        relTol          0.01;
-        minIter         1;
-    }
+    RASModel        kEpsilon;
 
-    "(p)Final"
-    {
-        $p;
-        relTol          0;
-    }
+    turbulence      on;
 
-    "(U|k|epsilon|rho)"
-    {
-        solver          PBiCGStab;
-        preconditioner  DILU;
-        tolerance       1e-9;
-        relTol          0.01;
-        minIter         1;
-    }
-
-    "(U|k|epsilon|rho)Final"
-    {
-        $U;
-        relTol          0;
-    }
-
-}
-
-PIMPLE
-{
-    momentumPredictor          yes;
-    nOuterCorrectors           1;
-    nCorrectors                2;
-    nNonOrthogonalCorrectors   0;
+    printCoeffs     on;
 }
 
 
